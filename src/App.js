@@ -25,6 +25,10 @@ const columns = [
   columnHelper.accessor('postleitzahl', {
     header: 'Postleitzahl',
     size: 50,
+    filterFn(row, columnId, value) {
+      const rowValue = row.getValue(columnId);
+      return rowValue.startsWith(value);
+    },
   }),
   columnHelper.accessor('gemeindeteil_name', {
     header: 'Gemeindeteil',
