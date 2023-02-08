@@ -20,8 +20,11 @@ const columnHelper = createColumnHelper();
 
 const columns = [
   columnHelper.accessor('postleitzahl', {
-    header: 'Postleitzahl',
-    size: 50,
+    header: () => <span>Post&shy;leit&shy;zahl</span>,
+    size: 80,
+    meta: {
+      inputMode: 'numeric',
+    },
     // Instead of `.includes()`, use `.startsWith()` to filter.
     // This is arguably more natural for postal codes.
     filterFn(row, columnId, value) {
@@ -36,8 +39,8 @@ const columns = [
     header: 'Straße',
   }),
   columnHelper.accessor('hausnummer', {
-    header: 'Hausnummer',
-    size: 50,
+    header: () => <span>Haus&shy;nummer</span>,
+    size: 80,
     enableColumnFilter: false,
   }),
   columnHelper.display({
@@ -49,7 +52,7 @@ const columns = [
       const query = `${address.strasse_name} ${address.hausnummer}, ${address.postleitzahl} ${address.gemeindeteil_name}, Deutschland`;
       const link = 'https://www.openstreetmap.org/search?query=' + encodeURIComponent(query);
 
-      return <a href={link} style={{textDecoration: 'none'}}>Öffnen ↗</a>;
+      return <a href={link} style={{textDecoration: 'none'}}>Öffnen&nbsp;↗</a>;
     },
   }),
 ];
@@ -101,7 +104,7 @@ function AddressTable() {
 
   return (
     <>
-      <Table style={{tableLayout: 'fixed'}}>
+      <Table responsive style={{tableLayout: 'fixed'}}>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
@@ -116,6 +119,7 @@ function AddressTable() {
                     <DebounceInput
                       element={Form.Control}
                       type='text'
+                      inputMode={header.column.columnDef.meta?.inputMode ?? 'text'}
                       value={(header.column.getFilterValue() ?? '')}
                       placeholder={`Suchen… (${header.column.getFacetedUniqueValues().size})`}
                       onChange={e => header.column.setFilterValue(e.target.value)}
@@ -133,7 +137,7 @@ function AddressTable() {
           {table.getRowModel().rows.map(row => (
             <tr key={row.id}>
               {row.getVisibleCells().map(cell => (
-                <td key={cell.id} style={{width: cell.column.getSize()}}>
+                <td key={cell.id} style={{width: cell.column.getSize(), hyphens: 'auto'}}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
