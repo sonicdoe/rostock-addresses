@@ -14,7 +14,7 @@ import {
 import {DebounceInput} from 'react-debounce-input';
 
 const ADDRESS_ENDPOINT = 'https://geo.sv.rostock.de/download/opendata/adressenliste/adressenliste.json';
-const ONE_DAY = 24 * 60 * 60 * 1000;
+const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 const columnHelper = createColumnHelper();
 
@@ -70,8 +70,8 @@ function AddressTable() {
         const now = new Date();
         const age = now - lastModified;
 
-        // …only use it it’s less than a day old.
-        if (age < ONE_DAY) {
+        // …only use it it’s less than a week old.
+        if (age < ONE_WEEK) {
           return match;
         }
       }
