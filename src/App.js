@@ -124,7 +124,10 @@ function App() {
                           placeholder={`Suchen… (${header.column.getFacetedUniqueValues().size})`}
                           onChange={e => header.column.setFilterValue(e.target.value)}
                         />
-                      ) : null}
+                      ) : (
+                        // Align headers by adding an invisible filter text field.
+                        <Form.Control disabled type='text' style={{visibility: 'hidden'}}/>
+                      )}
                     </th>
                   ))}
                 </tr>
