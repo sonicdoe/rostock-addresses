@@ -22,6 +22,8 @@ const columns = [
   columnHelper.accessor('postleitzahl', {
     header: 'Postleitzahl',
     size: 50,
+    // Instead of `.includes()`, use `.startsWith()` to filter.
+    // This is arguably more natural for postal codes.
     filterFn(row, columnId, value) {
       const rowValue = row.getValue(columnId);
       return rowValue.startsWith(value);
@@ -57,6 +59,7 @@ function AddressTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
 
   useEffect(() => {
+    // Cache responses via the Cache API.
     async function getResponse() {
       const cache = await caches.open('opendata');
       const match = await cache.match(ADDRESS_ENDPOINT);
@@ -109,6 +112,7 @@ function AddressTable() {
                     header.getContext(),
                   )}
                   {header.column.getCanFilter() ? (
+                    // Debounce filter input to reduce load.
                     <DebounceInput
                       element={Form.Control}
                       type='text'
