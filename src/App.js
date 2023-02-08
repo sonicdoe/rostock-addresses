@@ -41,6 +41,18 @@ const columns = [
     size: 50,
     enableColumnFilter: false,
   }),
+  columnHelper.display({
+    header: () => <abbr title='OpenStreetMap'>OSM</abbr>,
+    size: 30,
+    id: 'osm',
+    cell(props) {
+      const address = props.row.original;
+      const query = `${address.strasse_name} ${address.hausnummer}, ${address.postleitzahl} ${address.gemeindeteil_name}, Deutschland`;
+      const link = 'https://www.openstreetmap.org/search?query=' + encodeURIComponent(query);
+
+      return <a href={link} style={{textDecoration: 'none'}}>Öffnen ↗</a>;
+    },
+  }),
 ];
 
 function App() {
