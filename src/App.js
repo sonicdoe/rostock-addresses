@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-table';
 
 const ADDRESS_ENDPOINT = 'https://geo.sv.rostock.de/download/opendata/adressenliste/adressenliste.json';
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 const columnHelper = createColumnHelper();
 
@@ -30,7 +31,27 @@ function App() {
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
-    fetch(ADDRESS_ENDPOINT)
+    async function getResponse() {
+      const cache = await caches.open('opendata');
+      const match = await cache.match(ADDRESS_ENDPOINT);
+
+      // If there’s a cache hit…
+      if (match) {
+        const lastModified = new Date(match.headers.get('Last-Modified'));
+        const now = new Date();
+        const age = now - lastModified;
+
+        // …only use it it’s less than a day old.
+        if (age < ONE_DAY) {
+          return match;
+        }
+      }
+
+      await cache.add(ADDRESS_ENDPOINT);
+      return cache.match(ADDRESS_ENDPOINT);
+    }
+
+    getResponse()
       .then(response => response.json())
       .then(result => setAddresses(result));
   }, []);
