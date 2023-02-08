@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "UNLICENSED",
   "repository": "sonicdoe/rostock-addresses",
+  "homepage": "https://sonicdoe.github.io/rostock-addresses",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
