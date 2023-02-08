@@ -20,6 +20,7 @@ const columnHelper = createColumnHelper();
 const columns = [
   columnHelper.accessor('postleitzahl', {
     header: 'Postleitzahl',
+    size: 50,
   }),
   columnHelper.accessor('gemeindeteil_name', {
     header: 'Gemeindeteil',
@@ -29,6 +30,7 @@ const columns = [
   }),
   columnHelper.accessor('hausnummer', {
     header: 'Hausnummer',
+    size: 50,
   }),
 ];
 
@@ -76,12 +78,12 @@ function App() {
           <h1>Adressenliste</h1>
           <p>Diese Tabelle listet alle Adressen der Hanse- und Universitätsstadt Rostock von <a href='https://www.opendata-hro.de/dataset/adressenliste'>OpenData.HRO</a>.</p>
 
-          <Table>
+          <Table style={{tableLayout: 'fixed'}}>
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
-                    <th key={header.id}>
+                    <th key={header.id} style={{width: header.getSize()}}>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
@@ -95,7 +97,7 @@ function App() {
               {table.getRowModel().rows.map(row => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map(cell => (
-                    <td key={cell.id}>
+                    <td key={cell.id} style={{width: cell.column.getSize()}}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
