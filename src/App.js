@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from 'react-bootstrap/Table';
 import {
   createColumnHelper,
@@ -6,6 +6,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+
+const ADDRESS_ENDPOINT = 'https://geo.sv.rostock.de/download/opendata/adressenliste/adressenliste.json';
 
 const columnHelper = createColumnHelper();
 
@@ -24,20 +26,17 @@ const columns = [
   }),
 ];
 
-const data = [
-  {
-    postleitzahl: '18147',
-    // eslint-disable-next-line camelcase
-    gemeindeteil_name: 'Gehlsdorf',
-    // eslint-disable-next-line camelcase
-    strasse_name: 'Blockweg',
-    hausnummer: '3',
-  },
-];
-
 function App() {
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    fetch(ADDRESS_ENDPOINT)
+      .then(response => response.json())
+      .then(result => setAddresses(result));
+  }, []);
+
   const table = useReactTable({
-    data,
+    data: addresses,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
