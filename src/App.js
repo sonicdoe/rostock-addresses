@@ -3,10 +3,12 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+import Pagination from 'react-bootstrap/Pagination';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -62,7 +64,9 @@ function App() {
   const table = useReactTable({
     data: addresses,
     columns,
+    pageSize: 10,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -99,6 +103,14 @@ function App() {
               ))}
             </tbody>
           </Table>
+
+          <nav className='d-flex align-items-center justify-content-end gap-3'>
+            <p>Seite {table.getState().pagination.pageIndex + 1} von {table.getPageCount()}</p>
+            <Pagination>
+              <Pagination.Prev disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}/>
+              <Pagination.Next disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}/>
+            </Pagination>
+          </nav>
         </Col>
       </Row>
     </Container>
